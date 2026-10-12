@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вэбсайт + JavaScript + Google Sheets</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">💻 Кодын хичээл</div>
+    <div class="top-note">Ахлах ангийн сурагчдад зориулсан интерактив слайд</div>
+  </header>
+
+  <main class="presentation">
+    <section class="slide active">
+      <p class="eyebrow">ВЭБ ХӨГЖҮҮЛЭЛТ · ХИЧЭЭЛ</p>
+      <h1>Вэбсайтаас Google Sheets рүү мэдээлэл илгээх</h1>
+      <p class="lead">HTML + CSS + JavaScript + Google Apps Script</p>
+      <div class="hero-visual">
+        <div class="mini-window">
+          <div class="dots"><i></i><i></i><i></i></div>
+          <div class="fake-input">Нэрээ оруулна уу</div>
+          <div class="fake-input">Ангиа оруулна уу</div>
+          <div class="fake-button">Илгээх ↗</div>
+        </div>
+        <div class="arrow">➜</div>
+        <div class="sheet-visual">
+          <div class="sheet-icon">▦</div>
+          <strong>Google Sheets</strong>
+          <span>Мэдээлэл хадгалах хүснэгт</span>
+        </div>
+      </div>
+      <p class="callout">Өнөөдрийн зорилго: сурагчийн мэдээллийг form-оор авч, хүснэгтэд хадгалдаг энгийн системийн ажиллагааг ойлгох.</p>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">01 · ҮНДСЭН ОЙЛГОЛТ</p>
+      <h2>Бид юу бүтээх вэ?</h2>
+      <p class="lead">Хэрэглэгч мэдээлэл оруулна → товч дарна → мэдээлэл хүснэгтэд очно.</p>
+      <div class="steps">
+        <article><span class="step-no">1</span><h3>HTML</h3><p>Нэр, анги зэрэг мэдээлэл оруулах талбар болон товчийг үүсгэнэ.</p><code>&lt;input&gt;</code></article>
+        <article><span class="step-no">2</span><h3>CSS</h3><p>Form-оо дэлгэцийн голд байрлуулж, өнгө, хүрээ, зайг тохируулна.</p><code>.col { ... }</code></article>
+        <article><span class="step-no">3</span><h3>JavaScript</h3><p>Товч дарахад мэдээллийг цуглуулж илгээнэ.</p><code>fetch()</code></article>
+        <article><span class="step-no">4</span><h3>Apps Script</h3><p>Ирсэн мэдээллийг Google Sheets-ийн мөрөнд хадгална.</p><code>appendRow()</code></article>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">02 · HTML</p>
+      <h2>1. Мэдээлэл оруулах хэсэг</h2>
+      <p>HTML нь вэбсайтын бүтэц. <code>input</code> нь хэрэглэгч бичих талбар, <code>button</code> нь үйлдэл эхлүүлэх товч.</p>
+      <div class="code-layout">
+        <pre><code>&lt;form class="col" id="myForm"&gt;
+  &lt;input id="name"
+    placeholder="Нэр" required&gt;
+
+  &lt;input id="className"
+    placeholder="Анги" required&gt;
+
+  &lt;button type="submit"&gt;
+    Илгээх
+  &lt;/button&gt;
+&lt;/form&gt;</code></pre>
+        <div class="demo-form">
+          <label>Нэр</label><input disabled placeholder="Жишээ: Болд">
+          <label>Анги</label><input disabled placeholder="Жишээ: 11А">
+          <button disabled>Илгээх</button>
+          <small>Энэ бол зөвхөн загварын жишээ.</small>
+        </div>
+      </div>
+      <p class="callout">Санамж: <code>id</code> нь JavaScript-д тухайн талбарыг олоход тусалдаг өвөрмөц нэр.</p>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">03 · CSS</p>
+      <h2>2. Form-оо дэлгэцийн голд байрлуулах</h2>
+      <p>CSS нь харагдах байдлыг тохируулна. Flexbox ашиглан form-оо хэвтээ болон босоо чиглэлд голлуулж болно.</p>
+      <pre><code>body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.col {
+  width: 300px;
+  padding: 24px;
+  border: 2px solid #b9c8ff;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}</code></pre>
+      <div class="definition-grid">
+        <div><code>justify-content: center</code><p>Хэвтээ чиглэлд голлуулна.</p></div>
+        <div><code>align-items: center</code><p>Босоо чиглэлд голлуулна.</p></div>
+        <div><code>gap: 12px</code><p>Элементүүдийн хооронд зай гаргана.</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">04 · JAVASCRIPT</p>
+      <h2>3. Товч дарахад мэдээлэл цуглуулах</h2>
+      <p>JavaScript нь form-ыг илгээх үйлдлийг барьж аваад input-ийн утгуудыг уншина.</p>
+      <pre><code>const form = document.getElementById("myForm");
+
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const name = document.getElementById("name").value;
+  const className =
+    document.getElementById("className").value;
+
+  console.log(name, className);
+});</code></pre>
+      <div class="definition-grid">
+        <div><code>getElementById()</code><p>ID-аар HTML элементийг олно.</p></div>
+        <div><code>.value</code><p>Талбарт бичсэн утгыг авна.</p></div>
+        <div><code>preventDefault()</code><p>Form-ийн анхдагч refresh үйлдлийг зогсооно.</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">05 · МЭДЭЭЛЭЛ ИЛГЭЭХ</p>
+      <h2>4. Google Sheets рүү дамжуулах</h2>
+      <p>JavaScript мэдээллийг Web App URL руу илгээнэ. Google Apps Script хүсэлтийг хүлээн авна.</p>
+      <pre><code>const data = {
+  name: name,
+  className: className
+};
+
+fetch(WEB_APP_URL, {
+  method: "POST",
+  body: new URLSearchParams(data)
+});</code></pre>
+      <div class="flow">
+        <div>🧑‍🎓<strong>Сурагч</strong><small>Мэдээлэл бөглөнө</small></div>
+        <b>→</b>
+        <div>🌐<strong>JavaScript</strong><small>Мэдээлэл илгээнэ</small></div>
+        <b>→</b>
+        <div>⚙️<strong>Apps Script</strong><small>Хүсэлтийг хүлээн авна</small></div>
+        <b>→</b>
+        <div>📊<strong>Sheets</strong><small>Мөр нэмнэ</small></div>
+      </div>
+      <p class="callout">Энд байгаа код нь ойлголтын жишээ. Бодит төсөлд өөрийн Apps Script Web App URL-ийг тохируулна.</p>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">06 · GOOGLE APPS SCRIPT</p>
+      <h2>5. Хүснэгтэд шинэ мөр нэмэх</h2>
+      <p>Apps Script нь Google Sheets-тэй холбогдож, ирсэн мэдээллийг шинэ мөр болгон бичнэ.</p>
+      <pre><code>function doPost(e) {
+  const sheet = SpreadsheetApp
+    .getActiveSpreadsheet()
+    .getSheetByName("Sheet1");
+
+  const data = e.parameter;
+
+  sheet.appendRow([
+    new Date(),
+    data.name || "",
+    data.className || ""
+  ]);
+
+  return ContentService
+    .createTextOutput("OK");
+}</code></pre>
+      <p><code>appendRow()</code> нь хүснэгтийн хамгийн доод хэсэгт шинэ мөр нэмдэг.</p>
+      <p class="callout warning">Аюулгүй байдал: нийтэд нээлттэй Web App-д хэн ч хүсэлт илгээж болзошгүй. Нууц үг, регистр зэрэг эмзэг мэдээлэл цуглуулахгүй, шаардлагатай бол хамгаалалт нэмнэ.</p>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">07 · ДАВТАЛТ</p>
+      <h2>Ойлголтоо шалгая</h2>
+      <p>Асуулт бүрт нэг хариулт сонгоод “Шалгах” товчийг дарна.</p>
+      <form id="quizForm" class="quiz">
+        <fieldset>
+          <legend>1. Вэбсайтын бүтэц үүсгэдэг нь аль вэ?</legend>
+          <label><input type="radio" name="q1" value="a"> CSS</label>
+          <label><input type="radio" name="q1" value="b"> HTML</label>
+          <label><input type="radio" name="q1" value="c"> Google Sheets</label>
+        </fieldset>
+        <fieldset>
+          <legend>2. Input-д бичсэн утгыг авахад юу хэрэглэдэг вэ?</legend>
+          <label><input type="radio" name="q2" value="a"> .value</label>
+          <label><input type="radio" name="q2" value="b"> .color</label>
+          <label><input type="radio" name="q2" value="c"> .center</label>
+        </fieldset>
+        <fieldset>
+          <legend>3. Google Sheets-д мөр нэмэх Apps Script арга аль вэ?</legend>
+          <label><input type="radio" name="q3" value="a"> appendRow()</label>
+          <label><input type="radio" name="q3" value="b"> background()</label>
+          <label><input type="radio" name="q3" value="c"> justify-content()</label>
+        </fieldset>
+        <button type="submit">Хариулт шалгах</button>
+        <p id="quizResult" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">08 · БИЕ ДААЛТ</p>
+      <h2>Өөрөө туршаад үзээрэй</h2>
+      <ol class="tasks">
+        <li>Form-д “И-мэйл” гэсэн шинэ input нэм.</li>
+        <li>CSS ашиглан товчны өнгийг өөрчил.</li>
+        <li>Google Sheets-д “И-мэйл” гэсэн шинэ багана нэм.</li>
+        <li>JavaScript болон Apps Script-д и-мэйлийг дамжуулдаг болго.</li>
+      </ol>
+      <div class="finish">
+        <span>🎯</span>
+        <div><strong>Гол санаа</strong><p>HTML мэдээлэл авна → JavaScript илгээнэ → Apps Script боловсруулна → Google Sheets хадгална.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="controls">
+    <button id="prevBtn" class="secondary">← Өмнөх</button>
+    <div class="progress-wrap">
+      <div class="progress-track"><div id="progressBar"></div></div>
+      <span id="slideCount">1 / 9</span>
+    </div>
+    <button id="nextBtn">Дараах →</button>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
